@@ -13,3 +13,29 @@ nltk.download('punkt')
 
 # Cargar modelo rápido y eficiente
 modelo = WhisperModel("small", device="cpu", compute_type="int8")
+
+# Función para transcribir y analizar texto
+def transcribir_y_analizar(ruta_audio):
+    if ruta_audio is None:
+        return "Por favor, sube un archivo de audio.", ""
+
+    inicio = time.time()
+
+    # Transcripción por segmentos
+    segmentos, _ = modelo.transcribe(ruta_audio, beam_size=5)
+    letra = "\n".join([segmento.text.strip() for segmento in segmentos])
+
+    fin = time.time()
+    tiempo = fin - inicio
+
+    # Análisis de palabras
+    palabras = nltk.word_tokenize(letra.lower())
+    palabras_filtradas = [p for p in palabras if p.isalpha()]
+    conteo = Counter(palabras_filtradas)
+    top10 = conteo.most_common(10)
+    resumen = "\n".join([f"{palabra}: {frecuencia}" for palabra, frecuencia in top10])
+
+    # Añadir tiempo al texto transcrito
+    letra_con_tiempo = f"{letra}\n\n---\nTiempo de análisis: {tiempo:.2f} segundos"
+
+    return letra_con_tiempo, resumen

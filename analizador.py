@@ -39,3 +39,15 @@ def transcribir_y_analizar(ruta_audio):
     letra_con_tiempo = f"{letra}\n\n---\nTiempo de análisis: {tiempo:.2f} segundos"
 
     return letra_con_tiempo, resumen
+
+# Interfaz gráfica con Gradio
+with gr.Blocks() as demo:
+    gr.Markdown("#  Analizador de letras de canciones (versión mejorada)")
+    gr.Markdown("Sube un archivo mp3 o wav y obtén la letra con análisis de palabras y tiempo de transcripción.")
+
+    entrada_audio = gr.Audio(type="filepath", label="Subir canción (mp3 o wav)")
+    salida_letra = gr.Textbox(label="Letra transcrita", lines=20)
+    salida_analisis = gr.Textbox(label="Top 10 palabras más usadas", lines=10)
+    boton = gr.Button("Analizar")
+
+    boton.click(transcribir_y_analizar, inputs=entrada_audio, outputs=[salida_letra, salida_analisis])

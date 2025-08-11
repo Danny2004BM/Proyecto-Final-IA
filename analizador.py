@@ -10,3 +10,6 @@ from collections import Counter
 
 # Descargar recursos para tokenización de nltk (solo la primera vez)
 nltk.download('punkt')
+
+# Cargar modelo rápido y eficiente
+modelo = WhisperModel("small", device="cpu", compute_type="int8")

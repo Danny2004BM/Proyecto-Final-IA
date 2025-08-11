@@ -8,3 +8,5 @@ import time
 import nltk
 from collections import Counter
 
+# Descargar recursos para tokenización de nltk (solo la primera vez)
+nltk.download('punkt')
